@@ -18,6 +18,7 @@ const CSV_HEADERS = [
   'Folder',
   'Name',
   'Status',
+  'Summary',
   'Precondition',
   'Labels',
   'Test Script (Step-by-Step) - Step',
@@ -28,6 +29,7 @@ function getTestStepCsv(
   testStep,
   testSuiteTitle: string = '',
   testCaseTitle: string = '',
+  testCaseSummary: string = '',
   testCasePreconditions: string = '',
   testCaseLabels: string = ''
 ): string[] {
@@ -35,6 +37,7 @@ function getTestStepCsv(
     testSuiteTitle,
     testCaseTitle,
     TestCaseStatus.Approved,
+    testCaseSummary,
     testCasePreconditions,
     testCaseLabels,
     testStep.actions[0],
@@ -44,6 +47,7 @@ function getTestStepCsv(
 
 function getTestCaseCsv(testCase, testSuiteTitle: string): string[][] {
   const testCaseTitle = testCase.$.name;
+  const testCaseSummary = testCase.summary[0];
   const testCaseLabels = testCase.keywords
     ? testCase.keywords[0].keyword
       .map((keyword) => keyword.$.name)
@@ -56,7 +60,7 @@ function getTestCaseCsv(testCase, testSuiteTitle: string): string[][] {
     // Leave test case parameters only for a first line
     const testStepCsv = index
       ? getTestStepCsv(testCase)
-      : getTestStepCsv(testCase, testSuiteTitle, testCaseTitle, testCasePreconditions, testCaseLabels);
+      : getTestStepCsv(testCase, testSuiteTitle, testCaseTitle, testCaseSummary, testCasePreconditions, testCaseLabels);
     result.push(testStepCsv);
     return result;
   }, []);
